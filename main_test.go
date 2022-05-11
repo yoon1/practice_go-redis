@@ -3,6 +3,7 @@ package main
 import (
 	"example.com/m/database"
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 	"net/http/httptest"
 	"testing"
 )
@@ -16,7 +17,11 @@ func Test_connectRedis(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	beforeCount := getCount(c, rds)
 
-	handle(c, rds, "UP")
-	// ..
+	handleCount(c, rds, "UP")
+
+	afterCount := getCount(c, rds)
+
+	assert.Equal(t, beforeCount+1, afterCount)
 }
